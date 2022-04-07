@@ -6,10 +6,30 @@ import (
 	"sort"
 )
 
+//func GroupByf64(table [][]float64, column)
+
+func FilterByString(table [][]string, colnum int, id string) [][]string {
+	var filtered [][]string
+	for i := range table {
+		if table[i][colnum] == id {
+			filtered = append(filtered, table[i])
+		}
+	}
+	return filtered
+}
+
 func GetColumnf64(table [][]float64, colnum int) []float64 {
 	var column []float64
 	for i := range table {
-		column[i] = table[i][colnum]
+		column = append(column, table[i][colnum])
+	}
+	return column
+}
+
+func GetColumnString(table [][]string, colnum int) []string {
+	var column []string
+	for i := range table {
+		column = append(column, table[i][colnum])
 	}
 	return column
 }
