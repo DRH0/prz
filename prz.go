@@ -8,6 +8,15 @@ import (
 
 //func GroupByf64(table [][]float64, column)
 
+func Make2df64(rows int, cols int) [][]float64 {
+	table := make([][]float64, rows)
+	chunk := make([]float64, cols*rows)
+	for i := range table {
+		table[i], chunk = chunk[:cols], chunk[cols:]
+	}
+	return table
+}
+
 func FilterByString(table [][]string, colnum int, id string) [][]string {
 	var filtered [][]string
 	for i := range table {
@@ -79,7 +88,7 @@ func Print2dString(table [][]string) {
 
 func FwdFillString(table [][]string, testcolumn int, testvalue string, retrievecolumn int) {
 	for i, row := range table {
-		if row[testcolumn] == testvalue && i < 4 {
+		if row[testcolumn] == testvalue {
 			table[i] = PrependString(row, row[retrievecolumn])
 		} else if i != 0 {
 			table[i] = PrependString(row, table[i-1][0])
@@ -87,10 +96,32 @@ func FwdFillString(table [][]string, testcolumn int, testvalue string, retrievec
 	}
 }
 
+func FwdFillf64(table [][]float64, testcolumn int, testvalue float64, retrievecolumn int) [][]float64 {
+	result := Make2df64(len(table), len(table[0]))
+	for i, _ := range table {
+		if table[i][testcolumn] == testvalue {
+			result[i] = Prependf64(table[i], table[i][retrievecolumn])
+		} else if i != 0 {
+			result[i] = Prependf64(table[i], table[i-1][0])
+		}
+	}
+	return result
+}
+
 func PrependString(row []string, s string) []string {
 	row = append(row, "")
 	copy(row[1:], row)
 	row[0] = s
+	return row
+}
+
+func Prependf64(row []float64, f float64) []float64 {
+	row = append(row, 99)
+	//fmt.Println(row)
+	copy(row[1:], row)
+	//fmt.Println(row)
+	row[0] = f
+	//fmt.Println(row)
 	return row
 }
 
